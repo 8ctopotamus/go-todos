@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Go TODOs</title>
+</head>
+<body>
+  <form action="" method="POST">
+    <label for="todo">New TODO:
+      <input name="todo" type="text">
+      <button type="submit">Add</button>
+    </label>
+  </form>
+  <h1>{{.PageTitle}}</h1>
+  <ul>
+    {{range .Todos}}
+      {{if .Done}}
+        <li class="done">{{.Title}} <a href="/delete/{{.ID}}">DELETE</a></li>
+      {{else}}
+        <li>{{.Title}} <a href="/done/{{.ID}}">Done</a></li>
+      {{end}}
+    {{end}}
+  </ul>
+</body>
+</html>
