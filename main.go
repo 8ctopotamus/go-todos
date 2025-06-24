@@ -1,11 +1,10 @@
 package main
 
 import (
-
-	// "strings"
 	"fmt"
 	"html/template"
 	"net/http"
+	"strings"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -52,6 +51,21 @@ func main() {
 		}
 
 		tmpl.Execute(w, data)
+	})
+
+	http.HandleFunc("/done/", func(w http.ResponseWriter, r *http.Request) {
+		id := strings.TrimPrefix(r.URL.Path, "/done/")
+		var todo Todo
+		db.First(&todo, id)
+		todo.Done = true
+		db.Save(&todo)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+	})
+
+	http.HandleFunc("/delete/", func(w http.ResponseWriter, r *http.Request) {
+		id := strings.TrimPrefix(r.URL.Path, "/delete/")
+		db.Delete(&Todo{}, id)
+		http.Redirect(w, r, "/", http.StatusSeeOther)
 	})
 
 	fmt.Printf("Listening on http://localhost:%v\n", PORT)
